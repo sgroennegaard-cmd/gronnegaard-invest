@@ -1,0 +1,133 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+locale: "da"
+
+collections:
+
+  # ── PORTEFØLJEDATA ─────────────────────────────────────────────
+  - name: "portefolje"
+    label: "📊 Porteføljedata"
+    files:
+      - name: "friemidler"
+        label: "Frie Midler"
+        file: "data/fri-midler.json"
+        fields:
+          - { label: "Markedsværdi (DKK)", name: "vaerdi", widget: "number", value_type: "int" }
+          - { label: "Afkast DKK", name: "afkastDKK", widget: "number", value_type: "int" }
+          - { label: "Afkast %", name: "afkastPct", widget: "number", value_type: "float" }
+          - { label: "Antal positioner", name: "positioner", widget: "number", value_type: "int" }
+          - { label: "Sidst opdateret (fx 28. mar. 2026)", name: "opdateret", widget: "string" }
+
+      - name: "ask"
+        label: "Aktiesparekonto (ASK)"
+        file: "data/ask.json"
+        fields:
+          - { label: "Egenkapital (DKK)", name: "vaerdi", widget: "number", value_type: "int" }
+          - { label: "Afkast DKK", name: "afkastDKK", widget: "number", value_type: "int" }
+          - { label: "Afkast % (1 år)", name: "afkastPct", widget: "number", value_type: "float" }
+          - { label: "Afkast % (maks)", name: "afkastPctMax", widget: "number", value_type: "float" }
+          - { label: "Sidst opdateret", name: "opdateret", widget: "string" }
+
+      - name: "aldersopsparing"
+        label: "Aldersopsparing"
+        file: "data/aldersopsparing.json"
+        fields:
+          - { label: "Total værdi (DKK)", name: "vaerdi", widget: "number", value_type: "int" }
+          - { label: "Heraf kontanter (DKK)", name: "kontanter", widget: "number", value_type: "int" }
+          - { label: "Afkast DKK (maks)", name: "afkastDKK", widget: "number", value_type: "int" }
+          - { label: "Afkast % (maks)", name: "afkastPct", widget: "number", value_type: "float" }
+          - { label: "Afkast % (1 år)", name: "afkastPct1aa", widget: "number", value_type: "float" }
+          - { label: "Sidst opdateret", name: "opdateret", widget: "string" }
+
+  # ── UDBYTTE ────────────────────────────────────────────────────
+  - name: "udbytte"
+    label: "💰 Udbyttetransaktioner"
+    folder: "data/udbytte"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.selskab}}"
+    summary: "{{dato}} — {{selskab}} — {{beloebDKK}} kr."
+    fields:
+      - { label: "Dato (dd-mm-åååå)", name: "dato", widget: "string" }
+      - { label: "Selskab", name: "selskab", widget: "string" }
+      - { label: "Antal aktier", name: "antal", widget: "number", value_type: "int" }
+      - { label: "Udbytte pr. aktie (fx 9,754 NOK)", name: "rate", widget: "string" }
+      - { label: "Beløb i DKK", name: "beloebDKK", widget: "number", value_type: "float" }
+
+  # ── NYHEDSBREVSARTIKLER ────────────────────────────────────────
+  - name: "artikler"
+    label: "📝 Nyhedsbrevsartikler"
+    folder: "data/artikler"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{dato}} — {{titel}}"
+    fields:
+      - { label: "Dato (fx 28. marts 2026)", name: "dato", widget: "string" }
+      - { label: "Titel", name: "titel", widget: "string" }
+      - { label: "Kategori (fx Udbytte & Shipping)", name: "kategori", widget: "string" }
+      - { label: "Ingress (2-3 sætninger)", name: "ingress", widget: "text" }
+      - { label: "Er artiklen premium?", name: "premium", widget: "boolean", default: false }
+
+  # ── COACHING & PRISER ──────────────────────────────────────────
+  - name: "coaching"
+    label: "🎯 Coaching & Priser"
+    files:
+      - name: "pakker"
+        label: "Coaching-pakker"
+        file: "data/coaching.json"
+        fields:
+          - { label: "Intro-session — Pris (kr.)", name: "introPris", widget: "number", value_type: "int" }
+          - { label: "Intro-session — Varighed", name: "introVarighed", widget: "string", default: "30 min" }
+          - { label: "Portefølje Gennemgang — Pris (kr.)", name: "standardPris", widget: "number", value_type: "int" }
+          - { label: "Portefølje Gennemgang — Varighed", name: "standardVarighed", widget: "string", default: "60 min" }
+          - { label: "Lang Snak over Kaffen — Pris (kr.)", name: "langPris", widget: "number", value_type: "int" }
+          - { label: "Lang Snak over Kaffen — Varighed", name: "langVarighed", widget: "string", default: "90 min" }
+
+  # ── FOREDRAG & PRISER ──────────────────────────────────────────
+  - name: "foredrag"
+    label: "🎤 Foredrag & Priser"
+    files:
+      - name: "priser"
+        label: "Foredragspriser"
+        file: "data/foredrag.json"
+        fields:
+          - { label: "Kort Oplæg — Pris (kr.)", name: "kortPris", widget: "number", value_type: "int" }
+          - { label: "Fuldt Foredrag — Pris (kr.)", name: "fuldt Pris", widget: "number", value_type: "int" }
+          - { label: "Workshop — Pris (kr.)", name: "workshopPris", widget: "number", value_type: "int" }
+
+  # ── KALENDER ───────────────────────────────────────────────────
+  - name: "kalender"
+    label: "📅 Tilgængelighed"
+    files:
+      - name: "datoer"
+        label: "Ledige & Optagne datoer"
+        file: "data/kalender.json"
+        fields:
+          - label: "April — Ledige datoer"
+            name: "april_ledig"
+            widget: "string"
+            hint: "Skriv datoer adskilt med komma, fx: 9,16,23,30"
+          - label: "April — Optagne datoer"
+            name: "april_optaget"
+            widget: "string"
+            hint: "Fx: 5,12,19,26"
+          - label: "Maj — Ledige datoer"
+            name: "maj_ledig"
+            widget: "string"
+            hint: "Fx: 7,14,21,28"
+          - label: "Maj — Optagne datoer"
+            name: "maj_optaget"
+            widget: "string"
+            hint: "Fx: 3,10,17,24"
+          - label: "Juni — Ledige datoer"
+            name: "juni_ledig"
+            widget: "string"
+            hint: "Fx: 4,11,18,25"
+          - label: "Juni — Optagne datoer"
+            name: "juni_optaget"
+            widget: "string"
+            hint: "Fx: 7,14,21"
